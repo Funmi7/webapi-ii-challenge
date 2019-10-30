@@ -33,20 +33,20 @@ postsRouter.get('/', (req, res) => {
 
 
 postsRouter.post('/:id/comments', (req, res) => {
-  const { id } = req.params;
-  const { text } = req.body;
-  db.findById(id)
+  // const { id } = req.params;
+  // const { text } = req.body;
+  db.findById(req.params.id)
     .then(data => {
       if(data.length === 0) {
         res.status(404).json({
           message: "The post with the specified ID does not exist."
         })
-      } else if (!text) {
+      } else if (!req.body.text) {
         res.status(400).json({
           errorMessage: "Please provide text for the comment."
         })
       } else {
-        return db.insertComment(text)
+        return db.insertComment(req.body)
       }   
     })
     .then(comment => {
